@@ -1,70 +1,161 @@
-# Getting Started with Create React App
+# TripGenie AI
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+AI-powered travel planning assistant that generates personalized day-by-day itineraries, budget breakdowns, and conversational trip refinement.
 
-## Available Scripts
+## Architecture
 
-In the project directory, you can run:
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   React SPA     │────▶│   FastAPI        │────▶│   MCP Server    │
+│   :3000         │     │   :8000          │     │   :8001          │
+│                 │     │                  │     │                  │
+│ Trip planner    │     │ /api/trips/*     │     │ search_dest…     │
+│ Chat interface  │     │ /api/chat        │     │ get_dest_info    │
+│ Itinerary view  │     │ /api/health      │     │ calc_budget      │
+│ Budget summary  │     │                  │     │ find_activities   │
+│ Tool activity   │     │ AI service       │     │ build_itinerary  │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+```
 
-### `npm start`
+**Frontend** — React 19 + React Router v6, Context/useReducer state management, CSS custom properties design system.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Backend** — FastAPI with Pydantic v2 models. Dual-mode AI: full Claude integration when an API key is configured, sample-data fallback when it isn't.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**MCP Server** — Model Context Protocol server (SDK v2, Streamable HTTP transport) exposing 5 travel-planning tools that Claude can invoke during conversations.
 
-### `npm test`
+## Quick Start (Windows PowerShell)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 1. Install dependencies
 
-### `npm run build`
+```powershell
+# Frontend
+npm install
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Backend
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r backend\requirements.txt
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 2. Configure environment
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```powershell
+Copy-Item backend\.env.example backend\.env
+# Edit backend\.env to add your ANTHROPIC_API_KEY (optional — app works without it in sample-data mode)
+```
 
-### `npm run eject`
+### 3. Start all three servers
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Open three terminal windows:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```powershell
+# Terminal 1 — Frontend
+npm start
+# → http://localhost:3000
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Terminal 2 — Backend API
+.\venv\Scripts\Activate.ps1
+python -m backend.main
+# → http://localhost:8000
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Terminal 3 — MCP Server
+.\venv\Scripts\Activate.ps1
+python -m backend.mcp_server
+# → http://localhost:8001
+```
 
-## Learn More
+## Environment Variables
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+| Variable | Default | Description |
+|---|---|---|
+| `REACT_APP_API_URL` | `http://localhost:8000` | Backend URL (frontend) |
+| `API_HOST` | `0.0.0.0` | Backend bind address |
+| `API_PORT` | `8000` | Backend port |
+| `ANTHROPIC_API_KEY` | *(empty)* | Claude API key; leave empty for sample-data mode |
+| `AI_MODEL` | `claude-sonnet-4-20250514` | Claude model to use |
+| `MCP_SERVER_URL` | `http://localhost:8001/mcp` | MCP server endpoint |
+| `CORS_ORIGINS` | `http://localhost:3000` | Comma-separated allowed origins |
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## API Endpoints
 
-### Code Splitting
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/health` | Health check (status, version, AI config) |
+| `POST` | `/api/trips/generate` | Generate itinerary from trip request |
+| `GET` | `/api/trips/{id}` | Retrieve a generated trip |
+| `POST` | `/api/trips/{id}/modify` | Modify an existing trip |
+| `GET` | `/api/trips/{id}/tools` | Get tool activity for a trip |
+| `POST` | `/api/chat` | Send a chat message |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## MCP Tools
 
-### Analyzing the Bundle Size
+The MCP server exposes these tools via Streamable HTTP transport:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+| Tool | Description |
+|---|---|
+| `search_destinations` | Find destinations by interests and region |
+| `get_destination_info` | Get detailed info for a specific destination |
+| `calculate_trip_budget` | Compute budget breakdown by category |
+| `find_activities_tool` | Discover activities matching interests |
+| `build_itinerary` | Generate a complete day-by-day itinerary |
 
-### Making a Progressive Web App
+### Verify MCP server
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```powershell
+# List available tools
+curl http://localhost:8001/mcp -H "Content-Type: application/json" `
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}'
+```
 
-### Advanced Configuration
+## Sample Data
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+When no `ANTHROPIC_API_KEY` is configured, the app runs in **sample-data mode**:
 
-### Deployment
+- Trip generation uses curated destination data for 6 cities: Kyoto, Bali, Paris, London, Marrakech, Amalfi Coast
+- Chat returns helpful responses labeled as sample-data mode
+- Budget calculations use estimated pricing tiers
+- All sample-data responses include `"dataSource": "sample"` and the UI shows a notice
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+This is intentional — the app is fully functional for demonstration without an API key.
 
-### `npm run build` fails to minify
+## Running Tests
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```powershell
+# Frontend
+npm test
+
+# Backend
+.\venv\Scripts\Activate.ps1
+python -m pytest backend\tests\ -v
+```
+
+## Project Structure
+
+```
+tripgenie/
+├── src/                        # React frontend
+│   ├── Components/
+│   │   ├── App.jsx             # Root with router
+│   │   ├── Header.jsx          # Navigation
+│   │   ├── HeroSection.jsx     # Landing page hero
+│   │   ├── chat/               # Chat interface components
+│   │   ├── common/             # LoadingState, ErrorMessage, EmptyState
+│   │   ├── itinerary/          # Itinerary, DaySchedule, ActivityCard, BudgetSummary
+│   │   ├── layout/             # Footer
+│   │   ├── planner/            # TripPlanner form
+│   │   └── tools/              # ToolActivityPanel
+│   ├── context/TripContext.js   # State management
+│   ├── pages/                   # LandingPage, PlannerPage
+│   ├── services/api.js          # API client
+│   └── styles/                  # CSS modules
+├── backend/
+│   ├── config.py                # Settings from env
+│   ├── main.py                  # FastAPI app
+│   ├── mcp_server.py            # MCP server (Streamable HTTP)
+│   ├── models/                  # Pydantic request/response models
+│   ├── routes/                  # API route handlers
+│   ├── services/                # AI, trip generation, budget calculation
+│   ├── data/                    # Sample destination & activity data
+│   └── tests/                   # pytest test suite
+└── package.json
+```

@@ -1,0 +1,10 @@
+.chat-page {
+  display: flex;
+  height: calc(100vh - var(--header-h));
+  overflow: hidden;
+}
+
+.chat-page .chat-main {
+  flex: 1;
+  min-width: 0;
+}

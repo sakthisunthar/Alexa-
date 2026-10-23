@@ -1,0 +1,476 @@
+/* === Planner Layout === */
+.planner-layout {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  min-height: calc(100vh - var(--header-h));
+}
+
+.planner-form-panel {
+  padding: 40px 48px;
+  max-width: 720px;
+  overflow-y: auto;
+}
+
+.planner-form-header {
+  margin-bottom: 28px;
+}
+
+.planner-form-header h2 {
+  font-size: 1.75rem;
+  margin-bottom: 6px;
+}
+
+.planner-form-header p {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* === Side Panel (decorative image) === */
+.planner-side-panel {
+  position: relative;
+  background: url('https://images.unsplash.com/photo-1488646472419-ad2ff41c4531?auto=format&fit=crop&w=800&q=80') center / cover no-repeat;
+  display: flex;
+  align-items: flex-end;
+  padding: 48px 32px;
+}
+
+.planner-side-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15,23,42,.75) 0%, rgba(15,23,42,.25) 60%, rgba(15,23,42,.1) 100%);
+}
+
+.planner-side-content {
+  position: relative;
+  color: var(--text-inverse);
+}
+
+.planner-side-content h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  color: var(--text-inverse);
+}
+
+.planner-side-content blockquote {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.85;
+  font-style: italic;
+}
+
+.planner-side-content cite {
+  display: block;
+  margin-top: 8px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* === Step Indicator === */
+.planner-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 32px;
+  padding: 16px 0;
+}
+
+.planner-steps__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.planner-steps__line {
+  width: 48px;
+  height: 2px;
+  background: var(--border);
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.planner-steps__line--done {
+  background: var(--primary);
+}
+
+.planner-steps__circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all var(--transition);
+}
+
+.planner-steps__circle--active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.planner-steps__circle--completed {
+  background: var(--success);
+  color: #fff;
+}
+
+.planner-steps__circle--future {
+  background: var(--border);
+  color: var(--text-muted);
+}
+
+.planner-steps__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.planner-steps__label--muted {
+  color: var(--text-muted);
+}
+
+/* === Step Form === */
+.step-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.step-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.step-section__title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.step-section__desc {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-top: -6px;
+}
+
+/* === Form Groups === */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group--grow { flex: 1; }
+
+.form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.input-field--icon {
+  padding-left: 38px;
+}
+
+.field-error {
+  font-size: 12px;
+  color: var(--error);
+  font-weight: 500;
+}
+
+/* === Traveler Counter === */
+.traveler-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.counter-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-alt);
+  color: var(--text);
+  border: none;
+  transition: background var(--transition);
+}
+
+.counter-btn:hover:not(:disabled) {
+  background: var(--border);
+}
+
+.counter-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.counter-value {
+  min-width: 48px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* === Preference Cards === */
+.pref-cards {
+  display: flex;
+  gap: 12px;
+}
+
+.pref-cards--row {
+  flex-direction: row;
+}
+
+.pref-cards--wrap {
+  flex-wrap: wrap;
+}
+
+.pref-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 18px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition);
+  min-width: 0;
+  flex: 1;
+}
+
+.pref-card:hover {
+  border-color: var(--primary-light);
+  background: var(--primary-50);
+}
+
+.pref-card--selected {
+  border-color: var(--primary);
+  background: var(--primary-50);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.pref-card--sm {
+  padding: 10px 16px;
+  flex-direction: row;
+  flex: 0 1 auto;
+}
+
+.pref-card__icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.pref-card__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* === Interest Chips === */
+.interest-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.interest-chip {
+  padding: 7px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--bg);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.interest-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.interest-chip--active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-inverse);
+}
+
+/* === Step Actions === */
+.step-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-light);
+  margin-top: 8px;
+}
+
+.step-actions--col {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* === Review Card === */
+.review-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.review-section__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.review-section__header h3 {
+  font-size: 15px;
+}
+
+.review-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: none;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition);
+}
+
+.review-edit:hover {
+  background: var(--primary-50);
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.review-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.review-item__icon {
+  color: var(--primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.review-item__label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.review-item__value {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.review-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.review-divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 20px 0;
+}
+
+/* === Generate Button === */
+.generate-btn {
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 16px;
+}
+
+.generate-note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* === Responsive === */
+@media (max-width: 960px) {
+  .planner-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .planner-side-panel {
+    display: none;
+  }
+
+  .planner-form-panel {
+    padding: 24px 20px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .review-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pref-cards--row {
+    flex-wrap: wrap;
+  }
+
+  .pref-card {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 100px;
+  }
+}
