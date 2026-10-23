@@ -3,6 +3,6 @@ import App from './App';
 
 test('renders the TripGenie AI landing page', () => {
   render(<App />);
-  expect(screen.getByText(/Your Perfect Trip Starts with AI/i)).toBeInTheDocument();
+  expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Your Perfect Trip/i);
   expect(screen.getByText(/Start Planning/i)).toBeInTheDocument();
 });

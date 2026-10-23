@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, Calendar, Users, DollarSign, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react';
+import { MapPin, Calendar, DollarSign, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react';
 import { currencies } from '../../data/destinations';
 
 function StepBasicDetails({ formData, setFormData, onNext, onBack }) {

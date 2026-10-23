@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Compass, Facebook, Twitter, Youtube, Mail } from 'lucide-react';
+import { Compass, Globe, MessageCircle, Video, Mail } from 'lucide-react';
 import '../../styles/footer.css';
 
 function Footer() {
@@ -38,9 +38,9 @@ function Footer() {
           <div className="footer-column">
             <h4>Follow Us</h4>
             <div className="footer-socials">
-              <a href="#!" className="footer-social-link" aria-label="Facebook"><Facebook size={18} /></a>
-              <a href="#!" className="footer-social-link" aria-label="Twitter"><Twitter size={18} /></a>
-              <a href="#!" className="footer-social-link" aria-label="YouTube"><Youtube size={18} /></a>
+              <a href="#!" className="footer-social-link" aria-label="Facebook"><Globe size={18} /></a>
+              <a href="#!" className="footer-social-link" aria-label="Twitter"><MessageCircle size={18} /></a>
+              <a href="#!" className="footer-social-link" aria-label="YouTube"><Video size={18} /></a>
               <a href="#!" className="footer-social-link" aria-label="Email"><Mail size={18} /></a>
             </div>
           </div>
